@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import Flask
 from flask import render_template, request
+from sqlalchemy.exc import IntegrityError
 
 from database.database import db, Usuario, Session, Lancamento, Categoria
 
@@ -33,9 +34,8 @@ def submitlancamento():
 
 @app.route('/submitcategoria', methods=['post'])
 def submitcategoria():
-    nome = request.form["nome"]
-    tipo = request.form["tipo"]
-    novo_categoria = Categoria(nome=nome, tipo=tipo)
+    tipo = request.form["tipo"].lower()
+    novo_categoria = Categoria(tipo=tipo)
     sessionCommit(novo_categoria)
 
     return "Tudo certo"
@@ -43,11 +43,14 @@ def submitcategoria():
 
 
 def sessionCommit(novo_commit):
-    session = Session()  # Crie uma sessão manualmente
-    session.add(novo_commit)
-    session.commit()
-    session.close()  # Feche a sessão
-
+    try:
+        session = Session()
+        session.add(novo_commit)
+        session.commit()
+        session.close()
+    except IntegrityError:
+        session.rollback()
+        print("já cadastrado!")
 
 if __name__ == "__app__":
     app.run(debug=True)

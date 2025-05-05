@@ -28,11 +28,9 @@ class Categoria(Base):
     __tablename__ = "categorias"
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
-    nome = Column("nome", String)
-    tipo = Column("tipo", String)
+    tipo = Column("tipo", String, unique=True)
 
-    def __init__(self, nome, tipo):
-        self.nome = nome
+    def __init__(self, tipo):
         self.tipo = tipo
 
 
