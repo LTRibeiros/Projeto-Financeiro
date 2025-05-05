@@ -24,21 +24,12 @@ class Usuario(Base):
         self.senha = senha
 
 
-class Categoria(Base):
-    __tablename__ = "categorias"
-
-    id = Column("id", Integer, primary_key=True, autoincrement=True)
-    tipo = Column("tipo", String, unique=True)
-
-    def __init__(self, tipo):
-        self.tipo = tipo
-
-
 class Lancamento(Base):
     __tablename__ = "lancamentos"
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     descricao = Column("descricao", String)
+    categoria = Column("categoria", String)
     valor = Column("valor", Float)
     data = Column("data", Date)
 
@@ -46,8 +37,9 @@ class Lancamento(Base):
     #relatorio_id = Column(Integer, ForeignKey("relatorios.id"))
     #categoria_id = Column(Integer, ForeignKey("categorias.id"))
 
-    def __init__(self, descricao, valor, data):
+    def __init__(self, descricao, categoria,  valor, data):
         self.descricao = descricao
+        self.categoria = categoria
         self.valor = valor
         self.data = data
 

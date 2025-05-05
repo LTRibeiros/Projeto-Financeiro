@@ -7,37 +7,52 @@
 
 </head>
 <body>
-     <h1>Usuário</h1>
-    <form method="post" action="/submitusuario">
-        <label for="nome">Nome:</label><br>
-        <input type="text" name="name" required><br>
-        <label for="email">Email:</label><br>
-        <input type="email" name="email" required><br>
-         <label for="senha">Senha:</label><br>
-        <input type="password" name="senha"  required><br><br>
-        <input type="submit" value="Submit">
-    </form>
-<br> <hr>
+<h1>Usuário</h1>
+<form method="post" action="/submitusuario">
+    <label for="nome">Nome:</label><br>
+    <input type="text" name="name" required><br>
+    <label for="email">Email:</label><br>
+    <input type="email" name="email" required><br>
+    <label for="senha">Senha:</label><br>
+    <input type="password" name="senha" required><br><br>
+    <input type="submit" value="Submit">
+</form>
+<br>
+<hr>
 
-    <h1>Lançamento</h1>
-    <form method="post" action="/submitlancamento">
-        <label for="descricao">Descrição:</label><br>
-        <input type="text" name="descricao" required><br>
-        <label for="valor">Valor:</label><br>
-        <input type="number" name="valor" required><br>
-         <label for="data">Data:</label><br>
-        <input type="date" name="data" required><br><br>
-        <input type="submit" value="Submit">
-    </form>
-<br> <hr>
+<h1>Lançamento</h1>
+<form method="post" action="/submitlancamento">
+    <label for="descricao">Descrição:</label><br>
+    <input type="text" name="descricao" required><br><br>
+     <select name="categoria" required>
+        <option value="" selected disabled hidden="hidden">Selecione uma categoria</option>
+        <option value="moradia">Moradia</option>
+        <option value="alimentacao">Alimentação</option>
+        <option value="transporte">Transporte</option>
+        <option value="lazer">Lazer</option>
+        <option value="saude">Saúde</option>
+        <option value="educacao">Educação</option>
+        <option value="vestuario">Vestuario</option>
+        <option value="conta">Contas</option>
+        <option value="divida">Dividas</option>
+        <option value="pet">Pets</option>
+        <option value="imprevisto">Imprevistos</option>
+        <option value="transporte">Outros</option>
+    </select> <br>
+    <label for="valor">Valor:</label><br>
+    <input type="number" name="valor" required><br>
+    <label for="data">Data:</label><br>
+    <input type="date" name="data" required><br><br>
+    <input type="submit" value="Submit">
 
-    <h1>Categoria</h1>
-    <form method="post" action="/submitcategoria">
-        <label for="tipo">Tipo:</label><br>
-        <input type="text" name="tipo" required><br><br>
 
-        <input type="submit" value="Submit">
-    </form>
+
+</form>
+<br>
+<hr>
+
+
+
 
 </body>
 </html>

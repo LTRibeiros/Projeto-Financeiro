@@ -3,7 +3,7 @@ from flask import Flask
 from flask import render_template, request
 from sqlalchemy.exc import IntegrityError
 
-from database.database import db, Usuario, Session, Lancamento, Categoria
+from database.database import db, Usuario, Session, Lancamento
 
 app = Flask(__name__)
 
@@ -24,22 +24,14 @@ def submitusuario():
 @app.route('/submitlancamento', methods=['post'])
 def submitlancamento():
     descricao = request.form["descricao"]
+    categoria = request.form["categoria"]
     valor = request.form["valor"]
     data = request.form["data"]
     data_obj = datetime.strptime(data, '%Y-%m-%d').date()
-    novo_lancamento = Lancamento(descricao=descricao, valor=valor, data=data_obj)
+    novo_lancamento = Lancamento(descricao=descricao, categoria=categoria, valor=valor, data=data_obj)
 
     sessionCommit(novo_lancamento)
     return "Tudo certo"
-
-@app.route('/submitcategoria', methods=['post'])
-def submitcategoria():
-    tipo = request.form["tipo"].lower()
-    novo_categoria = Categoria(tipo=tipo)
-    sessionCommit(novo_categoria)
-
-    return "Tudo certo"
-
 
 
 def sessionCommit(novo_commit):
