@@ -1,10 +1,11 @@
-from sqlalchemy import create_engine, Column, String, Integer, Double, Date, ForeignKey, Boolean, Float
-# cria o bando de dados
-from sqlalchemy.orm import sessionmaker, declarative_base, foreign  # criar sessão e tabelas
+from sqlalchemy import create_engine, Integer, String, Float, Boolean, Column, Date, ForeignKey
+from sqlalchemy.orm import sessionmaker, declarative_base
 
-db = create_engine("sqlite:///meubanco.db")
+# Configuração do banco de dados (exemplo com SQLite)
+db = create_engine("sqlite:///banco.db")
 Session = sessionmaker(bind=db)
 session = Session()
+
 
 Base = declarative_base() #criação da base
 
@@ -12,13 +13,13 @@ Base = declarative_base() #criação da base
 class Usuario(Base):
     __tablename__ = "usuarios"
 
-    nome_Usuario = Column("nome", String)
     id = Column("id", Integer, primary_key=True, autoincrement=True)
+    nome_usuario = Column("nome", String)
     email = Column("email", String)
     senha = Column("senha", String)
 
     def __init__(self, nome_usuario, email, senha):
-        self.nome_Usuario = nome_usuario
+        self.nome_usuario = nome_usuario
         self.email = email
         self.senha = senha
 
@@ -40,7 +41,7 @@ class Lancamento(Base):
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     descricao = Column("descrição", String)
-    valor = Column("valor", Double)
+    valor = Column("valor", Float)
     data = Column("data", Date)
 
     usuario_id = Column(Integer, ForeignKey("usuarios.id"))
