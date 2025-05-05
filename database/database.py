@@ -28,11 +28,11 @@ class Categoria(Base):
     __tablename__ = "categorias"
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
-    nome_Categoria = Column("nome_Categoria", String)
+    nome = Column("nome", String)
     tipo = Column("tipo", String)
 
-    def __init__(self, nome_categoria, tipo):
-        self.nome_Categoria = nome_categoria
+    def __init__(self, nome, tipo):
+        self.nome = nome
         self.tipo = tipo
 
 
@@ -40,18 +40,19 @@ class Lancamento(Base):
     __tablename__ = "lancamentos"
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
-    descricao = Column("descrição", String)
+    descricao = Column("descricao", String)
     valor = Column("valor", Float)
     data = Column("data", Date)
 
-    usuario_id = Column(Integer, ForeignKey("usuarios.id"))
-    relatorio_id = Column(Integer, ForeignKey("relatorios.id"))
-    categoria_id = Column(Integer, ForeignKey("categorias.id"))
+    #usuario_id = Column(Integer, ForeignKey("usuarios.id"))
+    #relatorio_id = Column(Integer, ForeignKey("relatorios.id"))
+    #categoria_id = Column(Integer, ForeignKey("categorias.id"))
 
     def __init__(self, descricao, valor, data):
         self.descricao = descricao
         self.valor = valor
         self.data = data
+
 
 
 class Relatorio(Base):
