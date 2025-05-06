@@ -6,10 +6,10 @@ db = create_engine("sqlite:///banco.db")
 Session = sessionmaker(bind=db)
 session = Session()
 
+Base = declarative_base()  # criação da base
 
-Base = declarative_base() #criação da base
 
-#criação das tabelas:
+# criação das tabelas:
 class Usuario(Base):
     __tablename__ = "usuarios"
 
@@ -33,31 +33,34 @@ class Lancamento(Base):
     valor = Column("valor", Float)
     data = Column("data", Date)
 
-    #usuario_id = Column(Integer, ForeignKey("usuarios.id"))
-    #relatorio_id = Column(Integer, ForeignKey("relatorios.id"))
-    #categoria_id = Column(Integer, ForeignKey("categorias.id"))
+    # usuario_id = Column(Integer, ForeignKey("usuarios.id"))
+    # relatorio_id = Column(Integer, ForeignKey("relatorios.id"))
+    # categoria_id = Column(Integer, ForeignKey("categorias.id"))
 
-    def __init__(self, descricao, categoria,  valor, data):
+    def __init__(self, descricao, categoria, valor, data):
         self.descricao = descricao
         self.categoria = categoria
         self.valor = valor
         self.data = data
 
 
-
 class Relatorio(Base):
     __tablename__ = "relatorios"
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
-    titulo = Column("titulo", String)
-    data = Column("data", Date)
-    total = Column("total",Float)
+    data_inicial = Column("data_inicial", Date)
+    data_final = Column("data_final", Date)
+    valor_minimo = Column("valor_minimo", Float)
+    valor_maximo = Column("valor_maximo", Float)
+    pesquisa_categoria = Column("pesquisa_categoria", String)
 
+    def __init__(self, data_inicial, data_final, valor_minimo, valor_maximo, pesquisa_categoria):
+        self.data_inicial = data_inicial
+        self.data_final = data_final
+        self.valor_minimo = valor_minimo
+        self.valor_maximo = valor_maximo
+        self.pesquisa_categoria = pesquisa_categoria
 
-    def __init__(self, titulo, data, total):
-        self.titulo = titulo
-        self.data = data
-        self.total = total
 
 ##########################################################
 Base.metadata.create_all(bind=db)

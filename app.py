@@ -3,13 +3,15 @@ from flask import Flask
 from flask import render_template, request
 from sqlalchemy.exc import IntegrityError
 
-from database.database import db, Usuario, Session, Lancamento
+from database.database import db, Usuario, Session, Lancamento, Relatorio
 
 app = Flask(__name__)
+
 
 @app.route('/')
 def index():
     return render_template("index.html")
+
 
 @app.route('/submitusuario', methods=['post'])
 def submitusuario():
@@ -20,6 +22,7 @@ def submitusuario():
 
     sessionCommit(novo_usuario)
     return "Tudo certo"
+
 
 @app.route('/submitlancamento', methods=['post'])
 def submitlancamento():
@@ -34,6 +37,22 @@ def submitlancamento():
     return "Tudo certo"
 
 
+@app.route('/pesquisa', methods=['post'])
+def pesquisa():
+    data_inicial = request.form["data_inicio"]
+    data_inicio_ = datetime.strptime(data_inicial, '%Y-%m-%d').date()
+    data_final = request.form["data_fim"]
+    data_fim_ = datetime.strptime(data_final, '%Y-%m-%d').date()
+    valor_minimo = request.form["valor_minimo"]
+    valor_maximo = request.form["valor_maximo"]
+    pesquisa_categoria = request.form["pesquisa_categoria"]
+    novo_lancamento = Relatorio(data_inicial=data_inicio_, data_final=data_fim_, valor_minimo=valor_minimo,
+                                valor_maximo=valor_maximo, pesquisa_categoria=pesquisa_categoria)
+
+    sessionCommit(novo_lancamento)
+    return "Tudo certo"
+
+
 def sessionCommit(novo_commit):
     try:
         session = Session()
@@ -43,6 +62,7 @@ def sessionCommit(novo_commit):
     except IntegrityError:
         session.rollback()
         print("já cadastrado!")
+
 
 if __name__ == "__app__":
     app.run(debug=True)
