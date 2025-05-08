@@ -3,13 +3,12 @@
 .venv
 
 # Arquivos gerados pelo Python
-__pycache__/
+__pycache__
 *.pyc
 *.pyo
 
 # IDE/Editores
-.vscode/
-.idea/
+.idea
 
 # Banco de dados local (se aplicável)
 *.db
