@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LTFinanças - Login</title>
+    <link type="text/css" href="static/style.css" rel="stylesheet">
+
+</head>
+<body>
+    <h1>Usuário</h1>
+    <form method="POST" action="/verificausuario">
+        <label for="nome">Nome:</label><br>
+        <input type="text" name="name" required><br>
+        <label for="email">Email:</label><br>
+        <input type="email" name="email" required><br>
+        <label for="senha">Senha:</label><br>
+        <input type="password" name="senha" required><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <a href="http://localhost:5000/cadastro">Não tem login? Faça o Cadastro</a>
+</body>
+</html>

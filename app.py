@@ -1,30 +1,41 @@
 from datetime import datetime
-from flask import Flask
+from flask import Flask, redirect, url_for, session, flash
 from flask import render_template, request
 from sqlalchemy.exc import IntegrityError
-
-from database.database import db, Usuario, Session, Lancamento, Relatorio
+from werkzeug.security import generate_password_hash, check_password_hash
+from database.database import Usuario, Session, Lancamento, Relatorio
 
 app = Flask(__name__)
+app.secret_key = 'd3f9a8f2e4b7c6a1d5e8f3b2c7a9d4e6f1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6'
 
 
-@app.route('/')
+@app.route('/index')
 def index():
     return render_template("index.html")
 
 
-@app.route('/submitusuario', methods=['post'])
-def submitusuario():
+@app.route('/cadastro')
+def cadastro():
+    return render_template("cadastro.html")
+
+
+@app.route('/')
+def login():
+    return render_template("login.html")
+
+
+@app.route('/cadastrausuario', methods=['POST'])
+def cadastrausuario():
     nome = request.form["name"]
     email = request.form["email"]
-    senha = request.form["senha"]
+    senha = generate_password_hash(request.form["senha"])
     novo_usuario = Usuario(nome_usuario=nome, email=email, senha=senha)
 
     sessionCommit(novo_usuario)
-    return "Tudo certo"
+    return redirect(url_for('login'))
 
 
-@app.route('/submitlancamento', methods=['post'])
+@app.route('/submitlancamento', methods=['POST'])
 def submitlancamento():
     descricao = request.form["descricao"]
     categoria = request.form["categoria"]
@@ -37,7 +48,27 @@ def submitlancamento():
     return "Tudo certo"
 
 
-@app.route('/pesquisa', methods=['post'])
+@app.route('/verificausuario', methods=['POST'])
+def verificausuario():
+    if request.method == 'POST':
+        email = request.form['email']
+        senha = request.form['senha']
+
+        session_db = Session()
+        usuario = session_db.query(Usuario).filter_by(email=email).first()
+        session_db.close()
+
+        # Verifica se usuário existe e a senha está correta
+        if usuario and check_password_hash(usuario.senha, senha):
+            session['usuario_id'] = usuario.id  # Armazena na sessão
+            session['usuario_email'] = usuario.email
+            return redirect(url_for('index'))  # Redireciona para área logada
+
+        flash('Email ou senha incorretos!', 'error')
+        return redirect(url_for('login'))
+
+
+@app.route('/pesquisa', methods=['POST'])
 def pesquisa():
     data_inicial = request.form["data_inicio"]
     data_inicio_ = datetime.strptime(data_inicial, '%Y-%m-%d').date()
@@ -64,5 +95,5 @@ def sessionCommit(novo_commit):
         print("já cadastrado!")
 
 
-if __name__ == "__app__":
+if __name__ == "__main__":
     app.run(debug=True)

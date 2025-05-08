@@ -7,21 +7,9 @@
 
 </head>
 <body>
-<h1>Usuário</h1>
-<form method="post" action="/submitusuario">
-    <label for="nome">Nome:</label><br>
-    <input type="text" name="name" required><br>
-    <label for="email">Email:</label><br>
-    <input type="email" name="email" required><br>
-    <label for="senha">Senha:</label><br>
-    <input type="password" name="senha" required><br><br>
-    <input type="submit" value="Submit">
-</form>
-<br>
-<hr>
 
 <h1>Lançamento</h1>
-<form method="post" action="/submitlancamento">
+<form method="POST" action="/submitlancamento">
     <label for="descricao">Descrição:</label><br>
     <input type="text" name="descricao" required><br><br>
     <select name="categoria" required>
@@ -49,13 +37,16 @@
 <hr>
 
 <h1>Pesquisa de gastos e relatório</h1>
-<form method="post" action="/pesquisa">
+<form method="POST" action="/pesquisa">
 
-    <label for="data_inicio">Data Início:</label>
-    <input type="date" name="data_inicio" required>
+    <div>
+        <label for="data_inicio">Data Início:</label>
+        <input type="date" name="data_inicio" required>
 
-    <label for="data_fim">Data Fim:</label>
-    <input type="date" name="data_fim" required>
+        <label for="data_fim">Data Fim:</label>
+        <input type="date" name="data_fim" required>
+
+    </div>
 
 
     <label for="valor_minimo">Valor Mínimo:</label>
