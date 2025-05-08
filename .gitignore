@@ -1,0 +1,16 @@
+# Arquivos de ambiente
+.env
+.venv
+
+# Arquivos gerados pelo Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE/Editores
+.vscode/
+.idea/
+
+# Banco de dados local (se aplicável)
+*.db
+*.sqlite

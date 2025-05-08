@@ -5,7 +5,6 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 db = create_engine("sqlite:///banco.db")
 Session = sessionmaker(bind=db)
 session_db = Session()
-
 Base = declarative_base()  # criação da base
 
 

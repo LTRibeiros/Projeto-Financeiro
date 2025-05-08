@@ -4,9 +4,9 @@ from flask import render_template, request
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 from database.database import Usuario, Session, Lancamento, Relatorio
-
+import os
 app = Flask(__name__)
-app.secret_key = 'd3f9a8f2e4b7c6a1d5e8f3b2c7a9d4e6f1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6'
+app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
 
 @app.route('/index')
