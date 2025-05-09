@@ -42,7 +42,8 @@ def submitlancamento():
     valor = request.form["valor"]
     data = request.form["data"]
     data_obj = datetime.strptime(data, '%Y-%m-%d').date()
-    novo_lancamento = Lancamento(descricao=descricao, categoria=categoria, valor=valor, data=data_obj)
+    usuario_id = session['usuario_id']
+    novo_lancamento = Lancamento(descricao=descricao, categoria=categoria, valor=valor, data=data_obj, usuario_id=usuario_id)
 
     sessionCommit(novo_lancamento)
     return "Tudo certo"

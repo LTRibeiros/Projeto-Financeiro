@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, Integer, String, Float, Boolean, Column, Date, ForeignKey
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 
 # Configuração do banco de dados (exemplo com SQLite)
 db = create_engine("sqlite:///banco.db")
@@ -14,7 +14,7 @@ class Usuario(Base):
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     nome_usuario = Column("nome", String)
-    email = Column("email", String)
+    email = Column("email", String, unique=True)
     senha = Column("senha", String)
 
     def __init__(self, nome_usuario, email, senha):
@@ -32,15 +32,16 @@ class Lancamento(Base):
     valor = Column("valor", Float)
     data = Column("data", Date)
 
-    # usuario_id = Column(Integer, ForeignKey("usuarios.id"))
+    usuario_id = Column(Integer, ForeignKey("usuarios.id"))
     # relatorio_id = Column(Integer, ForeignKey("relatorios.id"))
     # categoria_id = Column(Integer, ForeignKey("categorias.id"))
 
-    def __init__(self, descricao, categoria, valor, data):
+    def __init__(self, descricao, categoria, valor, data, usuario_id):
         self.descricao = descricao
         self.categoria = categoria
         self.valor = valor
         self.data = data
+        self.usuario_id = usuario_id
 
 
 class Relatorio(Base):
