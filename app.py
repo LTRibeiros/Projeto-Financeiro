@@ -5,7 +5,9 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 from database.database import Usuario, Session, Lancamento, Relatorio
 import os
+
 app = Flask(__name__)
+
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
 
@@ -43,7 +45,8 @@ def submitlancamento():
     data = request.form["data"]
     data_obj = datetime.strptime(data, '%Y-%m-%d').date()
     usuario_id = session['usuario_id']
-    novo_lancamento = Lancamento(descricao=descricao, categoria=categoria, valor=valor, data=data_obj, usuario_id=usuario_id)
+    novo_lancamento = Lancamento(descricao=descricao, categoria=categoria, valor=valor, data=data_obj,
+                                 usuario_id=usuario_id)
 
     sessionCommit(novo_lancamento)
     return "Tudo certo"
@@ -85,6 +88,38 @@ def pesquisa():
     return "Tudo certo"
 
 
+@app.route('/relatorio', methods=['POST'])
+def relatorio():
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import sqlite3
+
+    session_id = session['usuario_id']
+    connectdb = sqlite3.connect("banco.db")
+    query = """
+    SELECT usuario_id, categoria, SUM(valor) as total
+    FROM lancamentos
+    WHERE usuario_id = :id
+    GROUP BY usuario_id, categoria
+    """
+
+    df = pd.read_sql_query(query, connectdb, params={'id': session_id})
+
+    plt.figure(figsize=(8, 8))
+    plt.pie(
+        df['total'],
+        labels=df['categoria'],
+        autopct='%1.1f%%',
+        startangle=90,
+    )
+
+    plt.title('Distribuição de Gastos por Categoria', fontweight='bold')
+    plt.legend(df['categoria'], loc="best", bbox_to_anchor=(1, 1))
+    plt.savefig('static/relatorio.png')
+    plt.tight_layout()
+    return "relatório gerado"
+
+
 def sessionCommit(novo_commit):
     try:
         session = Session()
@@ -97,4 +132,4 @@ def sessionCommit(novo_commit):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
