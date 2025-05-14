@@ -16,39 +16,8 @@ a:link ,a:visited {
       background: white;
     }
 
-#header {
-    height: 100px;
-    width: 1522px;
-    background-color: #4C585B;
-    border: solid red 1px;
-    margin-left: 340px;
-}
+/************************************************/
 
-#conteudo-header {
-    font-size: 2em;
-    font-family: "Trebuchet MS", Harrington, sans-serif;
-    text-align: center;
-    padding: 35px;
-
-
-}
-
-
-
-#barra-lateral {
-    background-color: #4C585B;
-    border: 1px solid red;
-    width: 340px;
-    height: 972px;
-    float: left;
-}
-
-#conteudo-lateral {
-
-    font-size: 3em;
-    font-family: "Trebuchet MS", Harrington, sans-serif;
-    margin-top: 400px;
-    padding: 8px 12px;
-
+.center {
 
 }
