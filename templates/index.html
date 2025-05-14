@@ -28,7 +28,7 @@
         <option value="transporte">Outros</option>
     </select> <br>
     <label for="valor">Valor:</label><br>
-    <input type="number" name="valor" required><br>
+    <input type="number" step="any" name="valor" required><br>
     <label for="data">Data:</label><br>
     <input type="date" name="data" required><br><br>
     <input type="submit" value="Submit">
@@ -50,14 +50,15 @@
 
 
     <label for="valor_minimo">Valor Mínimo:</label>
-    <input type="number" name="valor_minimo" required>
+    <input type="number" step="any" name="valor_minimo" required>
 
     <label for="valor_maximo">Valor Máximo:</label>
-    <input type="number" name="valor_maximo" required>
+    <input type="number" step="any" name="valor_maximo" required>
 
 
     <select name="pesquisa_categoria" required>
         <option value="" selected disabled hidden="hidden">Selecione uma categoria</option>
+        <option value="todas">Todas as categorias</option>
         <option value="moradia">Moradia</option>
         <option value="alimentacao">Alimentação</option>
         <option value="transporte">Transporte</option>
@@ -74,12 +75,16 @@
     <input type="submit" value="Submit">
 
 </form>
+<img src="static/gastofiltrado.png">
+
 
 <h2>Grafico de gasto:</h2>
 <form method="POST" action="/relatorio">
  <button type="submit">Gerar Relatório</button><br>
 </form>
 <img src="static/relatorio.png">
+
+
 
 
 <br>

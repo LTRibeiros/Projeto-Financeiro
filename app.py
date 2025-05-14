@@ -1,6 +1,8 @@
+import sqlite3
 from datetime import datetime
 from flask import Flask, redirect, url_for, session, flash
 from flask import render_template, request
+from matplotlib import pyplot as plt
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 from database.database import Usuario, Session, Lancamento, Relatorio
@@ -49,7 +51,7 @@ def submitlancamento():
                                  usuario_id=usuario_id)
 
     sessionCommit(novo_lancamento)
-    return "Tudo certo"
+    return render_template("index.html")
 
 
 @app.route('/verificausuario', methods=['POST'])
@@ -74,18 +76,64 @@ def verificausuario():
 
 @app.route('/pesquisa', methods=['POST'])
 def pesquisa():
-    data_inicial = request.form["data_inicio"]
-    data_inicio_ = datetime.strptime(data_inicial, '%Y-%m-%d').date()
-    data_final = request.form["data_fim"]
-    data_fim_ = datetime.strptime(data_final, '%Y-%m-%d').date()
-    valor_minimo = request.form["valor_minimo"]
-    valor_maximo = request.form["valor_maximo"]
-    pesquisa_categoria = request.form["pesquisa_categoria"]
-    novo_lancamento = Relatorio(data_inicial=data_inicio_, data_final=data_fim_, valor_minimo=valor_minimo,
-                                valor_maximo=valor_maximo, pesquisa_categoria=pesquisa_categoria)
+    import pandas as pd
 
-    sessionCommit(novo_lancamento)
-    return "Tudo certo"
+    connectdb = sqlite3.connect("banco.db")
+    session_id = session['usuario_id']
+    data_inicial = request.form["data_inicio"]
+    inicio = datetime.strptime(data_inicial, '%Y-%m-%d').date()
+    data_final = request.form["data_fim"]
+    final = datetime.strptime(data_final, '%Y-%m-%d').date()
+    minimo = request.form["valor_minimo"]
+    maximo = request.form["valor_maximo"]
+    categoria = request.form["pesquisa_categoria"]
+
+    query = ("""
+        SELECT descricao, valor, categoria, data
+        FROM lancamentos
+        WHERE 
+            data >= :data_inicial
+            AND data <= :data_final
+            AND valor >= :valor_minimo
+            AND valor <= :valor_maximo
+            
+            AND usuario_id = :id
+    """)
+
+    # passagem de parâmetros de variaveis (evita sqlinjection
+    params={
+        'data_inicial': inicio,
+        'data_final': final,
+        'valor_minimo': minimo,
+        'valor_maximo': maximo,
+
+        'id': session_id
+    }
+
+    if categoria and categoria != 'todas':
+        query += " AND categoria = :categoria"
+        params['categoria'] = categoria
+
+    lf = pd.read_sql_query(
+        query,
+        connectdb,
+        params=params)
+
+    altura = max(1.5, 0.5 * len(lf))
+    fig, ax = plt.subplots(figsize=(8,altura))
+    ax.axis('off')
+    tabela = ax.table(cellText=lf.values, colLabels=lf.columns, cellLoc='center', loc='center')
+    tabela.auto_set_font_size(False)
+    tabela.set_fontsize(10)
+    tabela.scale(1, 1.5)
+    plt.tight_layout()
+
+    # Salva na pasta static
+    caminho = 'static/gastofiltrado.png'
+    plt.savefig(caminho, bbox_inches='tight')
+    plt.close()
+
+    return render_template("index.html")
 
 
 @app.route('/relatorio', methods=['POST'])
@@ -113,11 +161,11 @@ def relatorio():
         startangle=90,
     )
 
-    plt.title('Distribuição de Gastos por Categoria', fontweight='bold')
+    plt.title('Porcentagem de Gastos por Categoria', fontweight='bold')
     plt.legend(df['categoria'], loc="best", bbox_to_anchor=(1, 1))
     plt.savefig('static/relatorio.png')
     plt.tight_layout()
-    return "relatório gerado"
+    return render_template("index.html")
 
 
 def sessionCommit(novo_commit):
