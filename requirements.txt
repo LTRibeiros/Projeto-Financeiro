@@ -2,4 +2,4 @@ Flask==2.2.5
 matplotlib==3.10.3
 pandas==2.2.3
 SQLAlchemy==2.0.39
-Werkzeug==2.0.1
+Werkzeug==2.2.2
