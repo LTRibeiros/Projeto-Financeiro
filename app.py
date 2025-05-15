@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from database.database import Usuario, Session, Lancamento, Relatorio
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
