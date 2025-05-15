@@ -133,7 +133,7 @@ def pesquisa():
     plt.savefig(caminho, bbox_inches='tight')
     plt.close()
 
-    return render_template("index.html")
+    return render_template("index.html", pesquisa_gerada=True)
 
 
 @app.route('/relatorio', methods=['POST'])
@@ -162,10 +162,12 @@ def relatorio():
     )
 
     plt.title('Porcentagem de Gastos por Categoria', fontweight='bold')
-    plt.legend(df['categoria'], loc="best", bbox_to_anchor=(1, 1))
+    plt.legend(df['categoria'], loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.subplots_adjust(right=0.75)
     plt.savefig('static/relatorio.png')
     plt.tight_layout()
-    return render_template("index.html")
+
+    return render_template("index.html", relatorio_gerado=True)
 
 
 def sessionCommit(novo_commit):
